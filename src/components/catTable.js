@@ -1,10 +1,20 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import PropTypes from 'prop-types';
 import CatRow from './catRow';
 
-const CatTable = (props) =>{
-    const {media} = props;
-    const catRow = media.map((item,index) => {
+const CatTable = () =>{
+    const [picArray,setArray] = useState([]);
+    const loadMedia = async () => {
+        const response = await fetch('test.json');
+        const json = await response.json();
+        console.log(json);
+        setArray(json);
+    };
+    useEffect(() =>{
+        loadMedia();
+    }, []);
+    
+    const catRow = picArray.map((item,index) => {
         return <CatRow file={item} key={index}/>
     });
     return (
