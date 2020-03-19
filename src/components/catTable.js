@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from "react";
-import PropTypes from 'prop-types';
 import CatRow from './catRow';
 
 const baseUrl = 'http://media.mw.metropolia.fi/wbma/';
@@ -33,8 +32,5 @@ const CatTable = () =>{
     );
 }
 
-CatTable.propTypes = {
-    media: PropTypes.array,
-};
 
 export default CatTable;
