@@ -1,23 +1,23 @@
 import React from "react";
-import CatRow from './catRow';
+import MediaRow from './MediaRow';
 import { useAllMedia } from "../hooks/ApiHooks";
 
 
-const CatTable = () =>{
+const MediaTable = () =>{
     const picArray = useAllMedia();
     console.log(picArray);
     
-    const catRow = picArray.map((item,index) => {
-        return <CatRow file={item} key={index}/>
+    const mediaRow = picArray.map((item,index) => {
+        return <MediaRow file={item} key={index}/>
     });
     return (
     <table>
         <tbody>
-        {catRow}
+        {mediaRow}
         </tbody>
     </table>
     );
 }
 
 
-export default CatTable;
+export default MediaTable;

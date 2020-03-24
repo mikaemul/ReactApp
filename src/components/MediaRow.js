@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
-const CatRow = (props) =>{
+const MediaRow = (props) =>{
     const {file} = props; 
     return (
         <tr>
@@ -22,8 +22,8 @@ const CatRow = (props) =>{
     );
 };
 
-CatRow.propTypes = {
+MediaRow.propTypes = {
     file: PropTypes.object,
 };
 
-export default CatRow;
+export default MediaRow;

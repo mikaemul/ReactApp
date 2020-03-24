@@ -1,11 +1,11 @@
 import React from 'react';
-import CatTable from '../components/catTable';
+import MediaTable from '../components/MediaTable';
 
 const Home = () =>{
     return (
         <>
             <h1>Home</h1>
-            <CatTable />
+            <MediaTable />
         </>    
     );
 };
