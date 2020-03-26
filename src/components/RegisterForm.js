@@ -1,24 +1,28 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import useSignUpForm from '../hooks/RegisterHooks';
 import { register, login, checkUserAvailable } from '../hooks/ApiHooks';
 import {withRouter} from 'react-router-dom';
+import { MediaContext } from '../contexts/MediaContext';
 
 const RegisterForm = ({history}) =>{
+    const [user,setUser] = useContext(MediaContext);
     const doRegister = async () =>{
-        const usable = await checkUserAvailable(inputs.user);
-        if(usable.available){
-        /*const req = await register(inputs);
-        console.log(req);
-        //kirjaudu automaattisesti
-        const user = await login(inputs);
-        console.log(user);
-        // siirry etusivulle
-        history.push('/home');
-        */
-        } else{
-            console.log('Not availabe');
+        try {
+            await checkUserAvailable(inputs.user);
+            await register(inputs);
+            //kirjaudu automaattisesti
+            const userData = await login(inputs);
+            setUser(userData.user);
+            //console.log(userData);
+            localStorage.getItem('token', userData.token);
+            // siirry etusivulle
+            history.push('/home');
+        }catch (e){
+            console.log(e.message);
+            //näytä virhe
         }
+       
     };
     const {inputs, handleInputChange,handleSubmit} = useSignUpForm(doRegister);
 

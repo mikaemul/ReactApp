@@ -46,10 +46,14 @@ const register = async (inputs) => {
       },
       body: JSON.stringify(inputs),
     };
-    const response = await fetch(baseUrl + 'users', fetchOptions);
-    const json = await response.json();
-    console.log(json);
-    return json;
+    try{
+      const response = await fetch(baseUrl + 'users', fetchOptions);
+      const json = await response.json();
+      if (!response.ok) throw new Error(json.message + ': ' + json.error);
+      return json;
+    }catch(e){
+      throw new Error(e.message);
+    }
   };
 
   const login = async (inputs) => {
@@ -60,15 +64,41 @@ const register = async (inputs) => {
       },
       body: JSON.stringify(inputs),
     };
-    const response = await fetch(baseUrl + 'login', fetchOptions);
-    const json = await response.json();
-    console.log(json);
-    return json;
+    try{
+      const response = await fetch(baseUrl + 'login', fetchOptions);
+      const json = await response.json();
+      if (!response.ok) throw new Error(json.message + ': ' + json.error);
+      return json;
+    }catch(e){
+    throw new Error(e.message);
+    }
   };
 
   const checkUserAvailable = async (name) => {
-    const response = await fetch(baseUrl + 'user/username/', name);
-    return await response.json();
+    try{
+      const response = await fetch(baseUrl + 'user/username/', name);
+      const json = await response.json();
+      if (!response.ok) throw new Error(json.message + ': ' + json.error);
+      return json;
+    }catch(e){
+      throw new Error(e.message);
+    }
+  };
+
+  const checkToken = async (token) =>{
+    const fetchOptions = {
+      headers: {
+        'x-access-token': token,
+      },
+    };
+    try{
+      const response = await fetch(baseUrl + 'users/user', fetchOptions);
+      const json = await response.json();
+      if (!response.ok) throw new Error(json.message + ': ' + json.error);
+      return json;
+    }catch(e){
+    throw new Error(e.message);
+    }
   };
 
 export {
@@ -77,4 +107,5 @@ export {
     register,
     login,
     checkUserAvailable,
+    checkToken,
 };
