@@ -5,12 +5,13 @@ import { register, login, checkUserAvailable } from '../hooks/ApiHooks';
 import {withRouter} from 'react-router-dom';
 import { MediaContext } from '../contexts/MediaContext';
 
-const RegisterForm = ({history}) =>{
+const RegisterForm = ({ history }) =>{
     const [user,setUser] = useContext(MediaContext);
     const doRegister = async () =>{
         try {
             await checkUserAvailable(inputs.user);
             await register(inputs);
+            console.log('täällä',register(inputs));
             //kirjaudu automaattisesti
             const userData = await login(inputs);
             setUser(userData.user);
