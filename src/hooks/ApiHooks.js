@@ -50,8 +50,6 @@ const register = async (inputs) => {
       const response = await fetch(baseUrl + 'users', fetchOptions);
       const json = await response.json();
       if (!response.ok) throw new Error(json.message + ': ' + json.error);
-      console.log(json);
-      console.log(response);
       return json;
       
     }catch(e){
@@ -79,7 +77,7 @@ const register = async (inputs) => {
 
   const checkUserAvailable = async (name) => {
     try{
-      const response = await fetch(baseUrl + 'users/username/', name);
+      const response = await fetch(baseUrl + 'users/username/' + name);
       const json = await response.json();
       if (!response.ok) throw new Error(json.message + ': ' + json.error);
       return json;
