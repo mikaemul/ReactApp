@@ -1,6 +1,7 @@
 import React from "react";
 import MediaRow from './MediaRow';
 import { useAllMedia } from "../hooks/ApiHooks";
+import { Container} from '@material-ui/core';
 
 
 const MediaTable = () =>{
@@ -11,11 +12,11 @@ const MediaTable = () =>{
         return <MediaRow file={item} key={index}/>
     });
     return (
-    <table>
-        <tbody>
+    <Container fixed >
+    
         {mediaRow}
-        </tbody>
-    </table>
+    
+    </Container>
     );
 }
 

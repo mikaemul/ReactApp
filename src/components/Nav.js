@@ -4,9 +4,25 @@ import {Link} from 'react-router-dom';
 import { checkToken } from '../hooks/ApiHooks';
 import {withRouter} from 'react-router-dom';
 import { MediaContext } from '../contexts/MediaContext';
+import { makeStyles, AppBar, Toolbar, Typography, Button} from '@material-ui/core';
+
+
+const useStyles = makeStyles((theme) =>({
+    root: {
+        flexGrow: 1,
+    },
+    menuButton: {
+        marginRight: theme.spacing(2),
+    },
+    title: {
+        flexGrow: 1,
+    },
+}));
 
 const Nav = ({history}) =>{
+    const classes = useStyles();
     const [user,setUser] = useContext(MediaContext);
+
     useEffect(() =>{
         const checkUser = async () =>{
             try{
@@ -21,27 +37,31 @@ const Nav = ({history}) =>{
         checkUser();
     },[history,setUser]);
     
+
+
     return (
-        <nav>
-            <ul>
-                <li>
+        <div className={classes.root}>
+        <AppBar position="static">
+            <Toolbar>
+                <Typography variant="h6" className={classes.title}>
                    <Link to="/home">Home</Link>
-                </li>
+                </Typography>
                 { user === null ? 
-                    <li>
+                    <Button color="inherit">
                     <Link to="/">Login</Link>
-                    </li> :
+                    </Button> :
                 <>
-                    <li>
+                    <Typography variant="h6" className={classes.title}>
                         <Link to="/profile">Profile</Link>
-                    </li>
-                    <li>
+                    </Typography>
+                    <Button color="inherit">
                         <Link to="/logout">Logout</Link>
-                    </li>
+                    </Button>
                 </>
                 }
-            </ul>
-        </nav>
+            </Toolbar>
+        </AppBar>
+        </div>
     );
 ;}
 Nav.propTypes = {

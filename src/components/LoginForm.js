@@ -4,6 +4,7 @@ import useLoginForm from '../hooks/LoginHooks';
 import { login } from '../hooks/ApiHooks';
 import {withRouter} from 'react-router-dom';
 import { MediaContext } from '../contexts/MediaContext';
+import { Button, TextField, Grid} from '@material-ui/core';
 
 const LoginForm = ({history}) =>{
     const [user,setUser] = useContext(MediaContext);
@@ -23,26 +24,41 @@ const LoginForm = ({history}) =>{
     const {inputs, handleInputChange,handleSubmit} = useLoginForm(doLogin);
 
     return (
-        <>
+        <Grid container spacing={3}>
+            <Grid item xs={12}>
             <h1>Login</h1>
+            </Grid>
+            <Grid item xs={12}>
             <form onSubmit={handleSubmit}>
-               <input
-                    type="text"
-                    name="username"
-                    placeholder="Username"
-                    onChange={handleInputChange}
-                    value={inputs.username}
-                />
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    onChange={handleInputChange}
-                    value={inputs.password}
-                />
-                <button type="submit">Register</button>
+                <Grid container spacing={3}>
+                    <Grid container item >
+                        <TextField
+                            variant="filled"
+                            type="text"
+                            name="username"
+                            label="Username"
+                            onChange={handleInputChange}
+                            value={inputs.username}
+                        />
+                    </Grid>
+                    <Grid container item >
+                        <TextField
+                            variant="filled"
+                            type="password"
+                            name="password"
+                            label="Password"
+                            onChange={handleInputChange}
+                            value={inputs.password}
+                        />
+                    </Grid>
+                    <Grid container item >
+                        <Button  variant="contained" color="primary" type="submit">Login</Button>
+                    </Grid>
+                </Grid>
            </form>
-        </>
+           </Grid>
+
+        </Grid>
     );
 };
 LoginForm.propTypes = {

@@ -102,6 +102,22 @@ const register = async (inputs) => {
     }
   };
 
+  const useAvatarImage = (id) =>{
+    const [data, setData] = useState([]);
+    const fetchUrl = async (fileid) =>{
+        const response =  await fetch(baseUrl + 'tags/avatar_480');
+        //const response =  await fetch(baseUrl + 'tags/' + fileid);
+        const item = await response.json();
+        setData(item);
+    };
+    
+    useEffect(() =>{
+        fetchUrl(id);
+    },[id]);
+
+    return data;
+};
+
 export {
     useAllMedia,
     useSingleMedia,
@@ -109,4 +125,5 @@ export {
     login,
     checkUserAvailable,
     checkToken,
+    useAvatarImage,
 };
