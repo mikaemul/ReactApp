@@ -102,7 +102,7 @@ const register = async (inputs) => {
     }
   };
 
-  const useAvatarImage = (id) =>{
+  const getAvatarImage = (id) =>{
     const [data, setData] = useState([]);
     const fetchUrl = async (fileid) =>{
         const response =  await fetch(baseUrl + 'tags/avatar_480');
@@ -125,5 +125,5 @@ export {
     login,
     checkUserAvailable,
     checkToken,
-    useAvatarImage,
+    getAvatarImage,
 };
