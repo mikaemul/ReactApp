@@ -4,7 +4,7 @@ import useSignUpForm from '../hooks/RegisterHooks';
 import { register, login, checkUserAvailable } from '../hooks/ApiHooks';
 import {withRouter} from 'react-router-dom';
 import { MediaContext } from '../contexts/MediaContext';
-import { Button, TextField, Grid} from '@material-ui/core';
+import { Button, Grid} from '@material-ui/core';
 import {ValidatorForm,TextValidator} from 'react-material-ui-form-validator';
 
 
@@ -52,14 +52,28 @@ const RegisterForm = ({history}) =>{
     };
     const {inputs, handleInputChange,handleSubmit} = useSignUpForm(doRegister);
     useEffect(() =>{
-        ValidatorForm.addValidationRule('',(value) =>{
+        ValidatorForm.addValidationRule('isPasswordMatch',(value) =>{
             if(value !== inputs.password){
                 return false;
             } else{
                 return true;
             }
-        })
-    },[]);
+        });
+
+        ValidatorForm.addValidationRule('isAvailable', async (value)=>{
+            try{
+                const response = await checkUserAvailable(value);
+                console.log(response);
+                return response.available;
+            }catch(e){
+                console.log(e.message);
+                return true;
+            }
+        });
+    }, [inputs]);
+
+    
+
 
     return (
         <Grid container spacing={3}>
@@ -81,8 +95,8 @@ const RegisterForm = ({history}) =>{
                                 value={inputs.username}
                                 error={errorMessage.username ? true : false}
                                 onBlur={handleBlur}
-                                validators={['required','minStringLenght:3']}
-                                errorMessages={['this field is required', 'have to be atleast 3 characters long']}
+                                validators={['required','minStringLenght:3','isAvailable']}
+                                errorMessages={['this field is required', 'have to be atleast 3 characters long','username is not available']}
                             />
                         </Grid>
 
@@ -95,13 +109,13 @@ const RegisterForm = ({history}) =>{
                                 label="Password"
                                 onChange={handleInputChange}
                                 value={inputs.password}
-                                validator={['required','isPassword']}
-                                errorMessages={['this field is required']}
+                                validators={['required','minStringLenght:5']}
+                                errorMessages={['this field is required', 'minimum lenght 5 characters']}
                             />
                         </Grid>
 
                         <Grid container item>
-                            <TextField
+                            <TextValidator
                                 fullWidth
                                 variant="filled"
                                 type="password"
@@ -109,6 +123,8 @@ const RegisterForm = ({history}) =>{
                                 label="Confirm password"
                                 onChange={handleInputChange}
                                 value={inputs.confirm}
+                                validators={['isPasswordMatch', 'required']}
+                                errorMessages={['Password mismatch', 'this field is required']}
                             />
                         </Grid>
 
@@ -127,7 +143,7 @@ const RegisterForm = ({history}) =>{
                         </Grid>
 
                         <Grid container item>
-                            <TextField
+                            <TextValidator
                                 fullWidth
                                 variant="filled"
                                 type="text"
@@ -135,6 +151,8 @@ const RegisterForm = ({history}) =>{
                                 label="Full name"
                                 onChange={handleInputChange}
                                 value={inputs.full_name}
+                                validators={['matchRegexp: ^[a-zA-Z]+(([\',.-][a-zA-Z ])?[a-zA-Z]*)*$']}
+                                errorMessages={['text only']}
                             />
                         </Grid>
 

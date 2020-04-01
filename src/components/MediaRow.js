@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from 'prop-types';
 import {Link as RouterLink} from 'react-router-dom';
 import { makeStyles,IconButton,GridListTileBar} from '@material-ui/core';
-import PageviewIcon from '@material-ui/icons';
+import PageviewIcon from '@material-ui/icons/Pageview';
 
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
