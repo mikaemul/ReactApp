@@ -1,14 +1,38 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import useSignUpForm from '../hooks/RegisterHooks';
 import { register, login, checkUserAvailable } from '../hooks/ApiHooks';
 import {withRouter} from 'react-router-dom';
 import { MediaContext } from '../contexts/MediaContext';
 import { Button, TextField, Grid} from '@material-ui/core';
+import {ValidatorForm,TextValidator} from 'react-material-ui-form-validator';
 
 
 const RegisterForm = ({history}) =>{
     const [user,setUser] = useContext(MediaContext);
+    const intitialValues ={
+        username: undefined,
+    };
+    const [errorMessage,setErrorMessage] = useState(intitialValues);
+
+    const handleBlur = async (evt) =>{
+        evt.persist();
+        try{
+        const response = await checkUserAvailable(evt.target.value);
+        console.log(response);
+        if(response.available){
+            setErrorMessage((errorMessage) =>{
+                return {
+                ...errorMessage,
+                username: response.username + 'is not available.',
+                }
+            });
+        }
+        }catch(e){
+            console.log(e.message);
+        }
+    };
+   
     const doRegister = async () =>{
         try {
             await checkUserAvailable(inputs.username);
@@ -27,6 +51,15 @@ const RegisterForm = ({history}) =>{
        
     };
     const {inputs, handleInputChange,handleSubmit} = useSignUpForm(doRegister);
+    useEffect(() =>{
+        ValidatorForm.addValidationRule('',(value) =>{
+            if(value !== inputs.password){
+                return false;
+            } else{
+                return true;
+            }
+        })
+    },[]);
 
     return (
         <Grid container spacing={3}>
@@ -34,17 +67,36 @@ const RegisterForm = ({history}) =>{
                 <h1>Register</h1>
             </Grid>
             <Grid item xs={12} >
-                <form onSubmit={handleSubmit}>
+                <ValidatorForm instantValidate={false} noValidate onSubmit={handleSubmit}>
                     <Grid container spacing={3}>
                         <Grid container item>
-                            <TextField
+                            <TextValidator
                                 fullWidth
+                                helperText={errorMessage.username}
                                 variant="filled"
                                 type="text"
                                 name="username"
                                 label="Username"
                                 onChange={handleInputChange}
                                 value={inputs.username}
+                                error={errorMessage.username ? true : false}
+                                onBlur={handleBlur}
+                                validators={['required','minStringLenght:3']}
+                                errorMessages={['this field is required', 'have to be atleast 3 characters long']}
+                            />
+                        </Grid>
+
+                        <Grid container item>
+                            <TextValidator
+                                fullWidth
+                                variant="filled"
+                                type="password"
+                                name="password"
+                                label="Password"
+                                onChange={handleInputChange}
+                                value={inputs.password}
+                                validator={['required','isPassword']}
+                                errorMessages={['this field is required']}
                             />
                         </Grid>
 
@@ -53,15 +105,15 @@ const RegisterForm = ({history}) =>{
                                 fullWidth
                                 variant="filled"
                                 type="password"
-                                name="password"
-                                label="Password"
+                                name="confirm"
+                                label="Confirm password"
                                 onChange={handleInputChange}
-                                value={inputs.password}
+                                value={inputs.confirm}
                             />
                         </Grid>
 
                         <Grid container item>
-                            <TextField
+                            <TextValidator
                                 fullWidth
                                 variant="filled"
                                 type="email"
@@ -69,6 +121,8 @@ const RegisterForm = ({history}) =>{
                                 label="Email"
                                 onChange={handleInputChange}
                                 value={inputs.email}
+                                validator={['required','isEmail']}
+                                errorMessages={['this field is required', 'email is not valid']}
                             />
                         </Grid>
 
@@ -88,7 +142,7 @@ const RegisterForm = ({history}) =>{
                             <Button fullWidth variant="contained" color="primary" type="submit">Register</Button>
                         </Grid>
                     </Grid>
-                </form>
+                </ValidatorForm>
            </Grid>
         </Grid>
     );

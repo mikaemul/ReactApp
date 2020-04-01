@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, {useState, useContext, useEffect } from 'react';
 import { MediaContext } from '../contexts/MediaContext';
 import {Card, CardMedia, CardContent, makeStyles, Typography} from '@material-ui/core';
 import {getAvatarImage} from '../hooks/ApiHooks';

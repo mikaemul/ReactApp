@@ -38,6 +38,11 @@ const useSingleMedia = (id) =>{
     return data;
 };
 
+const getAvatarImage = async (id) =>{
+  const response = await fetch(baseUrl + 'tags/avatar_' + id);
+  return await response.json();
+};
+
 const register = async (inputs) => {
     const fetchOptions = {
       method: 'POST',
@@ -102,7 +107,7 @@ const register = async (inputs) => {
     }
   };
 
-  const getAvatarImage = (id) =>{
+  const useAvatarImage =  (id) =>{
     const [data, setData] = useState([]);
     const fetchUrl = async (fileid) =>{
         const response =  await fetch(baseUrl + 'tags/avatar_480');
@@ -125,5 +130,6 @@ export {
     login,
     checkUserAvailable,
     checkToken,
+    useAvatarImage,
     getAvatarImage,
 };

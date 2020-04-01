@@ -1,11 +1,13 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import {Link} from 'react-router-dom';
-import { Button,Card, CardMedia, CardContent, makeStyles, Typography} from '@material-ui/core';
+import {Link as RouterLink} from 'react-router-dom';
+import { makeStyles,IconButton,GridListTileBar} from '@material-ui/core';
+import PageviewIcon from '@material-ui/icons';
+
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) =>({
     root: {
         maxWidth:345,
     },
@@ -16,27 +18,32 @@ const useStyles = makeStyles({
         boxShadow: '6px -6px 5px 0px rgba(0,0,0,0.56)',
         margin: 20,
     },
-});
+    icon: {
+        color: 'rgba(255,255,255,0.54',
+    },
+}));
 
 const MediaRow = (props) =>{
     const classes = useStyles();
     const {file} = props; 
     return (
-        <Card className={classes.card}>
-           <CardMedia
-            className={classes.media}
-            image={mediaUrl + file.thumbnails.w160}
-            title="Title"
+        <>
+            <img src={mediaUrl + file.thumbnails.w320} alt={file.title}/>
+           <GridListTileBar
+            title="file.title"
+            subtitle="file.description"
+            actionIcon={
+                <IconButton
+                    aria-label={`info about ${file.title}`}
+                    component={RouterLink}
+                    to={'/single/' + file.file_id}
+                    className={classes.icon}
+                >
+                    <PageviewIcon fontSize="large"/>
+                    </IconButton>
+            }
            />
-           <CardContent>
-               <Typography variant="h5" component="h3">{file.title}</Typography>
-               <Typography variant="body2" color="textSecondary" component="p">{file.description}</Typography>
-           </CardContent>
-           <Button fullWidth variant="outlined" color="primary">
-               <Link to={'/single/' + file.file_id}>View</Link>
-           </Button>
-       </Card>
-    
+        </> 
     );
 };
 
