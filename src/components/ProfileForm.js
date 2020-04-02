@@ -1,12 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {  checkUserAvailable } from '../hooks/ApiHooks';
+import {  checkUserAvailable, updateProfile,checkToken} from '../hooks/ApiHooks';
 import {withRouter} from 'react-router-dom';
 import { MediaContext } from '../contexts/MediaContext';
 import { Button, Grid} from '@material-ui/core';
 import {ValidatorForm,TextValidator} from 'react-material-ui-form-validator';
 import useProfileForm from '../hooks/ProfileHooks';
-import updateProfile from '../hooks/ApiHooks';
 
 const ProfileForm = ({history}) =>{
     const [user,setUser] = useContext(MediaContext);
@@ -17,7 +16,7 @@ const ProfileForm = ({history}) =>{
 
     const doProfile= async () =>{
         try {
-            localStorage.setItem('token', userData.token);
+            const token = localStorage.getItem('token');
             await updateProfile(inputs,token);
             const userData = await checkToken('token');
             console.log(userData);
@@ -107,7 +106,7 @@ const ProfileForm = ({history}) =>{
                                 label="Full name"
                                 onChange={handleInputChange}
                                 value={inputs.full_name}
-                                validators={['matchRegexp: ^[a-zA-Z]+(([\',.-][a-zA-Z ])?[a-zA-Z]*)*$']}
+                                validators={['matchRegexp:^[a-zA-Z]+(([\',. -][a-zA-Z ])?[a-zA-Z]*)*$']}
                                 errorMessages={['text only']}
                             />
                         </Grid>

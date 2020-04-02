@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import useSignUpForm from '../hooks/RegisterHooks';
 import { register, login, checkUserAvailable } from '../hooks/ApiHooks';
