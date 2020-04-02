@@ -10,6 +10,7 @@ import {ValidatorForm,TextValidator} from 'react-material-ui-form-validator';
 
 const RegisterForm = ({history}) =>{
     const [user,setUser] = useContext(MediaContext);
+    /*
     const intitialValues ={
         username: undefined,
     };
@@ -32,7 +33,7 @@ const RegisterForm = ({history}) =>{
             console.log(e.message);
         }
     };
-   
+   */
     const doRegister = async () =>{
         try {
             await checkUserAvailable(inputs.username);
