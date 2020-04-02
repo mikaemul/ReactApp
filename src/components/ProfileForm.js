@@ -10,7 +10,7 @@ import updateProfile from '../hooks/ApiHooks';
 
 const ProfileForm = ({history}) =>{
     const [user,setUser] = useContext(MediaContext);
-    const [toggle,setToggle] = useState(true);
+    const [toggle,setToggle] = useState(false);
     const showHide = () =>{
         setToggle(!toggle);
     };
@@ -19,6 +19,9 @@ const ProfileForm = ({history}) =>{
         try {
             localStorage.setItem('token', userData.token);
             await updateProfile(inputs,token);
+            const userData = await checkToken('token');
+            console.log(userData);
+            setUser(userData);
         }catch (e){
             console.log(e.message);
             //näytä virhe
@@ -49,6 +52,17 @@ const ProfileForm = ({history}) =>{
 
     return (
         <Grid container spacing={3}>
+            <Grid item>
+                <Button
+                    fullWidth
+                    color="primary"
+                    onClick={showHide}
+                    >
+                        Update profile
+                    </Button>
+            </Grid>
+            {toggle  &&
+            <>
             <Grid item xs={12}>
                 <h1>Modify profile</h1>
             </Grid>
@@ -105,6 +119,8 @@ const ProfileForm = ({history}) =>{
                 </ValidatorForm>
 
            </Grid>
+           </>
+        }
         </Grid>
     );
 };
