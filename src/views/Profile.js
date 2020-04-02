@@ -2,6 +2,7 @@ import React, {useState, useContext, useEffect } from 'react';
 import { MediaContext } from '../contexts/MediaContext';
 import {Card, CardMedia, CardContent, makeStyles, Typography} from '@material-ui/core';
 import {getAvatarImage} from '../hooks/ApiHooks';
+import ProfileForm from '../components/ProfileForm';
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
@@ -44,6 +45,7 @@ const Profile = () =>{
                 </CardContent>
             </Card>
             }
+            <ProfileForm/>
         </>
     );
 };

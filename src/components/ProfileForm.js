@@ -1,86 +1,56 @@
 import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import useSignUpForm from '../hooks/RegisterHooks';
-import { register, login, checkUserAvailable } from '../hooks/ApiHooks';
+import {  checkUserAvailable } from '../hooks/ApiHooks';
 import {withRouter} from 'react-router-dom';
 import { MediaContext } from '../contexts/MediaContext';
 import { Button, Grid} from '@material-ui/core';
 import {ValidatorForm,TextValidator} from 'react-material-ui-form-validator';
+import useProfileForm from '../hooks/ProfileHooks';
+import updateProfile from '../hooks/ApiHooks';
 
-
-const RegisterForm = ({history}) =>{
+const ProfileForm = ({history}) =>{
     const [user,setUser] = useContext(MediaContext);
-    /*
-    const intitialValues ={
-        username: undefined,
+    const [toggle,setToggle] = useState(true);
+    const showHide = () =>{
+        setToggle(!toggle);
     };
-    const [errorMessage,setErrorMessage] = useState(intitialValues);
 
-    const handleBlur = async (evt) =>{
-        evt.persist();
-        try{
-        const response = await checkUserAvailable(evt.target.value);
-        console.log(response);
-        if(response.available){
-            setErrorMessage((errorMessage) =>{
-                return {
-                ...errorMessage,
-                username: response.username + 'is not available.',
-                }
-            });
-        }
-        }catch(e){
-            console.log(e.message);
-        }
-    };
-   */
-    const doRegister = async () =>{
+    const doProfile= async () =>{
         try {
-            //await checkUserAvailable(inputs.username);
-            delete inputs.confirm;
-            await register(inputs);
-            //kirjaudu automaattisesti
-            const userData = await login(inputs);
-            setUser(userData.user);
-            //console.log(userData);
             localStorage.setItem('token', userData.token);
-            // siirry etusivulle
-            history.push('/home');
+            await updateProfile(inputs,token);
         }catch (e){
             console.log(e.message);
             //näytä virhe
         }
        
     };
-    const {inputs, handleInputChange,handleSubmit} = useSignUpForm(doRegister);
-    useEffect(() =>{
-        ValidatorForm.addValidationRule('isPasswordMatch',(value) =>{
-            if(value !== inputs.password){
-                return false;
-            } else{
-                return true;
-            }
-        });
+  
+    const {inputs,setInputs,handleInputChange,handleSubmit} = useProfileForm(doProfile);
 
+    useEffect(() =>{
+        setInputs(user);
         ValidatorForm.addValidationRule('isAvailable', async (value)=>{
             try{
+                if(value !== user.username){
                 const response = await checkUserAvailable(value);
                 console.log(response);
                 return response.available;
+                }else {
+                    return true;
+                }
             }catch(e){
                 console.log(e.message);
                 return true;
             }
         });
-    }, [inputs]);
-
-    
+    }, [user,setInputs]);
 
 
     return (
         <Grid container spacing={3}>
             <Grid item xs={12}>
-                <h1>Register</h1>
+                <h1>Modify profile</h1>
             </Grid>
             <Grid item xs={12} >
                 <ValidatorForm instantValidate={false} noValidate onSubmit={handleSubmit}>
@@ -99,33 +69,6 @@ const RegisterForm = ({history}) =>{
                             />
                         </Grid>
 
-                        <Grid container item>
-                            <TextValidator
-                                fullWidth
-                                variant="filled"
-                                type="password"
-                                name="password"
-                                label="Password"
-                                onChange={handleInputChange}
-                                value={inputs.password}
-                                validators={['required','minStringLenght:5']}
-                                errorMessages={['this field is required', 'minimum lenght 5 characters']}
-                            />
-                        </Grid>
-
-                        <Grid container item>
-                            <TextValidator
-                                fullWidth
-                                variant="filled"
-                                type="password"
-                                name="confirm"
-                                label="Confirm password"
-                                onChange={handleInputChange}
-                                value={inputs.confirm}
-                                validators={['isPasswordMatch', 'required']}
-                                errorMessages={['Password mismatch', 'this field is required']}
-                            />
-                        </Grid>
 
                         <Grid container item>
                             <TextValidator
@@ -156,17 +99,18 @@ const RegisterForm = ({history}) =>{
                         </Grid>
 
                         <Grid container item>
-                            <Button fullWidth variant="contained" color="primary" type="submit">Register</Button>
+                            <Button fullWidth variant="contained" color="primary" type="submit">Save profile</Button>
                         </Grid>
                     </Grid>
                 </ValidatorForm>
+
            </Grid>
         </Grid>
     );
 };
 
-RegisterForm.propTypes = {
+ProfileForm.propTypes = {
     history: PropTypes.object,
 };
 
-export default withRouter(RegisterForm);
+export default withRouter(ProfileForm);
