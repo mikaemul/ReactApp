@@ -97,7 +97,7 @@ const RegisterForm = ({history}) =>{
                                 error={errorMessage.username ? true : false}
                                 onBlur={handleBlur}
                                 validators={['required','minStringLenght:3','isAvailable']}
-                                errorMessages={['this field is required', 'have to be atleast 3 characters long','username is not available']}
+                                errorMessages={['this field is required', 'have to be atleast 3 characters long', inputs.username + ' is not available']}
                             />
                         </Grid>
 
