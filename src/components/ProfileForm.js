@@ -17,8 +17,8 @@ const ProfileForm = ({history}) =>{
     const doProfile= async () =>{
         try {
             const token = localStorage.getItem('token');
-            await updateProfile(inputs,token);
-            const userData = await checkToken('token');
+            await updateProfile(inputs, token);
+            const userData = await checkToken(token);
             console.log(userData);
             setUser(userData);
         }catch (e){

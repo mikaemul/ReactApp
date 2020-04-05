@@ -123,7 +123,7 @@ const register = async (inputs) => {
 
     return data;
 };
-const updateProfile = async (inputs,token) => {
+const updateProfile = async (inputs, token) => {
   const fetchOptions = {
     method: 'PUT',
     headers: {
