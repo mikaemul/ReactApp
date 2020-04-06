@@ -30,8 +30,8 @@ const MediaRow = (props) =>{
         <>
             <img src={mediaUrl + file.thumbnails.w320} alt={file.title}/>
            <GridListTileBar
-            title="file.title"
-            subtitle="file.description"
+            title= {file.title}
+            subtitle={file.description}
             actionIcon={
                 <IconButton
                     aria-label={`info about ${file.title}`}

@@ -54,6 +54,9 @@ const Nav = ({history}) =>{
                     <Typography variant="h6" className={classes.title}>
                         <Link to="/profile">Profile</Link>
                     </Typography>
+                    <Typography variant="h6" className={classes.title}>
+                        <Link to="/upload">Upload</Link>
+                    </Typography>
                     <Button color="inherit">
                         <Link to="/logout">Logout</Link>
                     </Button>
