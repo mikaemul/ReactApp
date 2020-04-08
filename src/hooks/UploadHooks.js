@@ -7,6 +7,10 @@ const useUploadForm = (callback) => {
         description: '',
         file: null,
         dataUrl: '',
+        brightness: 100,
+        contrast: 100,
+        saturation: 100,
+        sepia: 0,
     });
     const handleSubmit = (event) => {
       if (event) {
@@ -23,6 +27,7 @@ const useUploadForm = (callback) => {
             };
         });
     }
+
     const handleFileChange = (event) =>{
         event.persist();
         const x = event.target.files[0];
@@ -34,12 +39,25 @@ const useUploadForm = (callback) => {
               };
         });
     };
+
+    const handleSliderChange = (event,value) =>{
+      if(event.target.previousElementSibling!== null && event.target.previousElementSibling.name !== undefined )
+       //console.log('nimi', event.target.previousElementSibling.name );
+       //console.log('arvo', value);
+       setInputs((inputs) => {
+        return {
+            ...inputs, 
+            [ event.target.previousElementSibling.name]: value,
+          };
+      });
+    }
     return {
       handleSubmit,
       handleInputChange,
       setInputs,
       inputs,
       handleFileChange,
+      handleSliderChange,
     };
   }
 

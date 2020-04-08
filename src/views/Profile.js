@@ -1,52 +1,80 @@
-import React, {useState, useContext, useEffect } from 'react';
-import { MediaContext } from '../contexts/MediaContext';
-import {Card, CardMedia, CardContent, makeStyles, Typography} from '@material-ui/core';
+import React, {useContext, useEffect, useState} from 'react';
+import {MediaContext} from '../contexts/MediaContext';
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+} from '@material-ui/core';
 import {getAvatarImage} from '../hooks/ApiHooks';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import PersonIcon from '@material-ui/icons/Person';
+import EmailIcon from '@material-ui/icons/Email';
 import ProfileForm from '../components/ProfileForm';
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
-const useStyles = makeStyles({
-    root: {
-        maxWidth:345,
-    },
-    media: {
-        height: 140,
-    },
-});
 
-const Profile = () =>{
-    const classes = useStyles();
-    const [user] = useContext(MediaContext);
-    //const avatar = useAvatarImage(480);
-    const [avatar,setAvatar] = useState([]);
+const Profile = () => {
+  const [user] = useContext(MediaContext);
+  const [avatar, setAvatar] = useState([]);
+  // console.log(user);
+  useEffect(() => {
+    (async () => {
+      if (user !== null) {
+        setAvatar(await getAvatarImage(user.user_id));
+      }
+    })();
+  }, [user]);
 
-    useEffect(() =>{
-        (async () => {
-            if(user !== null){
-                setAvatar(await getAvatarImage(user.user_id));
-            }
-        })();
-    }, [user]);
-    return (
-        <>
-            {user !== null && avatar.length > 0 &&
-            <Card>
-                <CardMedia
-                    className={classes.media}
-                    image={mediaUrl + avatar[0].filename}
-                    title="Avatar image"
-                />
-                <CardContent>
-                <Typography component="h2" variant="h5" gutterBottom>Profile</Typography>
-                <Typography variant="body2" color="textSecondary" component="p">{user.username}</Typography>
-                <Typography variant="body2" color="textSecondary" component="p">{user.email}</Typography>
-                <Typography variant="body2" color="textSecondary" component="p">{user.full_name}</Typography>
-                </CardContent>
-            </Card>
-            }
-            <ProfileForm/>
-        </>
-    );
+  // console.log('avatar', avatar);
+  return (
+    <>
+      <Typography
+        component="h1"
+        variant="h2"
+        gutterBottom>Profile</Typography>
+      {user !== null && avatar.length > 0 &&
+      <Card>
+        <CardMedia
+          component="img"
+          image={mediaUrl + avatar[0].filename}
+          alt="Avatar image"
+          title="Avatar image"
+        />
+        <CardContent>
+          <List>
+            <ListItem>
+              <ListItemIcon>
+                <AccountBoxIcon/>
+              </ListItemIcon>
+              <ListItemText primary={user.username}/>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <EmailIcon/>
+              </ListItemIcon>
+              <ListItemText primary={user.email}/>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <PersonIcon/>
+              </ListItemIcon>
+              <ListItemText primary={user.full_name}/>
+            </ListItem>
+          </List>
+        </CardContent>
+      </Card>
+      }
+      <ProfileForm />
+    </>
+  );
 };
+
 export default Profile;
+
+
