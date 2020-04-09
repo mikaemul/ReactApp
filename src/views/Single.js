@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {useSingleMedia} from '../hooks/ApiHooks';
-import {Card, CardMedia,Typography,makeStyles} from '@material-ui/core';
+import {Card, CardMedia,Typography,makeStyles, Button} from '@material-ui/core';
+import BackButton from '../components/BackButton';
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
@@ -21,27 +22,46 @@ const useStyles = makeStyles({
   },
 });
 
-const Single = ({match}) => {
+const Single = ({match, history}) => {
   const classes=useStyles();
   console.log('match',match.params.id);
-   // TODO: fetch single media based on id from path parameter
   const file = useSingleMedia(match.params.id);
-  
+  let description = undefined;
+  if(file !== null){
+  description = (JSON.parse(file.description));
+  };
   return (
+    <>
+    { file !== null &&
     <Card>
+      <BackButton/>
       <Typography component="h1" variant="h5">{file.title}</Typography>
+      { description &&
       <CardMedia
-      className={classes.thumbnail}
-      image={mediaUrl + file.filename}
-      title={file.title}
-      />
+        className={classes.thumbnail}
+        image={mediaUrl + file.filename}
+        title={file.title}
+        style={
+          {
+              filter: `
+          brightness(${description.filters.brightness}%)
+          contrast(${description.filters.contrast}%) 
+          saturate(${description.filters.saturation}%)
+          sepia(${description.filters.sepia}%)
+          `,
+          }}
+        />
+        }
     </Card>
+    }
+    </>
   );
 };
 
 // TODO: add propTypes
 Single.propTypes ={
     match: PropTypes.object,
+    history: PropTypes.object
 };
 
 export default Single;

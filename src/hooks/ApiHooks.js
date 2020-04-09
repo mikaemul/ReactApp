@@ -5,7 +5,8 @@ const baseUrl = 'http://media.mw.metropolia.fi/wbma/';
 const useAllMedia = () =>{
     const [data, setData] = useState([]);
     const fetchUrl = async () =>{
-        const response = await fetch(baseUrl + 'media');
+        const response = await fetch(baseUrl + 'tags/mpjakk');
+        //const response = await fetch(baseUrl + 'media');
         const json = await response.json();
         console.log(json);
         // haetaan thumbnails/kuvat
@@ -24,7 +25,7 @@ const useAllMedia = () =>{
 };
 
 const useSingleMedia = (id) =>{
-    const [data, setData] = useState({});
+    const [data, setData] = useState(null);
     const fetchUrl = async (fileid) =>{
         const response =  await fetch(baseUrl + 'media/' + fileid);
         const item = await response.json();
@@ -160,13 +161,46 @@ const upload = async (inputs, token) =>{
        const response = await fetch(baseUrl + 'media', fetchOptions);
        const json = await response.json();
        if(!response.ok) throw new Error(json.message + ':' + json.error);
+       const tagOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': token,
+        },
+        body: JSON.stringify({
+          'file_id': json.file_id,
+          'tag': 'mpjakk',
+        }),
+      };
+       const tagResponse = await fetch(baseUrl + 'tags', tagOptions);
+       const tagJson = await tagResponse.json();
        console.log('json',json);
-       return json;
+       return {json, tagJson};
       }catch(e){
         throw new Error(e.message);
       }
 };
+const addTag = async (file_id, tag,token) =>{
+  const tagOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-access-token': token,
+    },
+    body: JSON.stringify({
+      file_id,
+      tag,
+    }),
+  };
 
+  try{
+    const tagResponse = await fetch(baseUrl + 'tags', tagOptions);
+    const tagJson = await tagResponse.json();
+    return tagJson;
+  }catch (e){
+    throw new Error(e.message);
+  }
+};
 
 export {
     useAllMedia,
@@ -179,4 +213,5 @@ export {
     getAvatarImage,
     updateProfile,
     upload,
+    addTag,
 };

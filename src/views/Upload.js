@@ -10,13 +10,28 @@ import {
   Typography,
 } from '@material-ui/core';
 import {ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
+import BackButton from '../components/BackButton';
 
 const Upload = ({history}) => {
   const [loading, setLoading] = useState(false);
   const doUpload = async () => {
     setLoading(true);
     try {
-      const result = await upload(inputs, localStorage.getItem('token'));
+      const uploadObject = {
+        title: inputs.title,
+        description: JSON.stringify({
+          desc: inputs.description,
+          filters: {
+            brightness: inputs.brightness,
+            contrast: inputs.contrast,
+            saturation: inputs.saturation,
+            sepia: inputs.sepia,
+          },
+        }),
+        file: inputs.file,
+
+      };
+      const result = await upload(uploadObject, localStorage.getItem('token'));
       console.log(result);
       setTimeout(() => {
         setLoading(false);
@@ -68,6 +83,7 @@ const Upload = ({history}) => {
 
   return (
     <Grid container>
+      <BackButton/>
       <Grid item>
         <h1>Upload</h1>
       </Grid>
