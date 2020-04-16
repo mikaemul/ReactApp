@@ -126,6 +126,16 @@ const ProfileForm = ({history}) => {
               </Grid>
 
               <Grid container item>
+                <TextValidator
+                  fullWidth
+                  type="file"
+                  name="test"
+                  validators={['allowedExtensions:image/png,image/jpeg,image/jpg']}
+                  errorMessages={['images only']}
+                />
+              </Grid>
+
+              <Grid container item>
                 <Button
                   fullWidth
                   color="primary"
@@ -149,3 +159,4 @@ ProfileForm.propTypes = {
 };
 
 export default withRouter(ProfileForm);
+

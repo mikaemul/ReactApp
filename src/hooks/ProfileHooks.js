@@ -32,4 +32,3 @@ const useProfileForm = (callback) => {
 };
 
 export default useProfileForm;
-
