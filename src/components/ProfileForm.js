@@ -130,7 +130,6 @@ const ProfileForm = ({history}) => {
                   fullWidth
                   type="file"
                   name="test"
-                  validators={['allowedExtensions:image/png,image/jpeg,image/jpg']}
                   errorMessages={['images only']}
                 />
               </Grid>
